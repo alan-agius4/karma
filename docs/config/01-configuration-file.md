@@ -17,7 +17,7 @@ Unless provided as argument, the Karma CLI will look for a configuration file at
 * `./.config/karma.conf.coffee`
 * `./.config/karma.conf.ts`
 
-in that order.
+in that order. 
 
 Within the configuration file, the configuration code is put together by setting `module.exports` to point to a function
 which accepts one argument: the configuration object.
@@ -51,6 +51,20 @@ module.exports = (config) => {
     //...
   });
 }
+```
+
+### <a name="customized-typescript-configuration"></a>Customized TypeScript Configuration
+Under the hood Karma uses ts-node to transpile TypeScript to JavaScript. However, if the resolved `tsconfig.json` by ts-node has `module` configured as `ES` format. You might get errors like `SyntaxError: Unexpected token`. This is due that in Node `ES` module formats are not supported. To overcome this issue you need to configure ts-node to use `commonjs` module format.
+
+Create a JavaScript configuration file that overrides the module format.
+```javascript
+// karma.conf.js
+require('ts-node').register({ 
+  compilerOptions: { 
+    module: 'commonjs' 
+  } 
+});
+require('./karma.conf.ts');
 ```
 
 ## File Patterns
